@@ -30,7 +30,6 @@ export const App = () => {
     setSearchField(event.target.value);
   };
 
-
   return (
     <div className="section">
       <div className="container">
@@ -78,14 +77,16 @@ export const App = () => {
                   <i className="fas fa-search" aria-hidden="true" />
                 </span>
 
-                <span className="icon is-right">
-                  {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                  <button
-                    data-cy="ClearButton"
-                    type="button"
-                    className="delete"
-                  />
-                </span>
+                {searchField && (
+                  <span className="icon is-right">
+                    <button
+                      type="button"
+                      className="delete"
+                      onClick={() => setSearchField('')}
+                      data-cy="ClearButton"
+                    />
+                  </span>
+                )}
               </p>
             </div>
 
