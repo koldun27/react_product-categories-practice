@@ -105,7 +105,7 @@ export const App = () => {
               </p>
             </div>
 
-            <div className="panel-block is-flex-wrap-wrap">
+            {/* <div className="panel-block is-flex-wrap-wrap">
               <a
                 href="#/"
                 data-cy="AllCategories"
@@ -136,7 +136,7 @@ export const App = () => {
               <a data-cy="Category" className="button mr-2 my-1" href="#/">
                 Category 4
               </a>
-            </div>
+            </div> */}
 
             <div className="panel-block">
               <a
@@ -151,9 +151,9 @@ export const App = () => {
           </nav>
         </div>
 
-        <div className="box table-container">
+        <div className="box table-container ">
           <table
-            className="table is-striped is-narrow is-fullwidthtable"
+            className="table is-striped is-narrow table is-fullwidth"
             data-cy="ProductTable"
           >
             <thead>
