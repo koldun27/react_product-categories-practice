@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import './App.scss';
 
 import usersFromServer from './api/users';
-// import categoriesFromServer from './api/categories';
-// import productsFromServer from './api/products';
+import categoriesFromServer from './api/categories';
+import productsFromServer from './api/products';
 
 // const products = productsFromServer.map((product) => {
 //   const category = null; // find by product.categoryId
@@ -21,6 +21,16 @@ export const App = () => {
     setSelectedUser(userId === selectedUser ? null : userId);
   };
 
+  const clearFilter = () => {
+    setSelectedUser(null);
+    setSearchField('');
+  };
+
+  const changeSearch = event => {
+    setSearchField(event.target.value);
+  };
+
+
   return (
     <div className="section">
       <div className="container">
@@ -31,7 +41,12 @@ export const App = () => {
             <p className="panel-heading">Filters</p>
 
             <p className="panel-tabs has-text-weight-bold">
-              <a data-cy="FilterAllUsers" href="#/">
+              <a
+                href="#/"
+                className={`button ${selectedUser === null ? 'is-active' : ''}`}
+                onClick={() => filterUser(null)}
+                data-cy="FilterAllUsers"
+              >
                 All
               </a>
 
@@ -55,7 +70,8 @@ export const App = () => {
                   type="text"
                   className="input"
                   placeholder="Search"
-                  value="qwe"
+                  value={searchField}
+                  onChange={changeSearch}
                 />
 
                 <span className="icon is-left">
@@ -111,6 +127,7 @@ export const App = () => {
                 data-cy="ResetAllButton"
                 href="#/"
                 className="button is-link is-outlined is-fullwidth"
+                onClick={clearFilter}
               >
                 Reset all filters
               </a>
