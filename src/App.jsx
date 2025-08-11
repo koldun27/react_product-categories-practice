@@ -30,6 +30,21 @@ export const App = () => {
     setSearchField(event.target.value);
   };
 
+  const filteredProducts = productsFromServer.filter(product =>
+    product.name.toLowerCase().includes(searchField.toLowerCase()),
+  );
+
+  const userFilteredProducts = selectedUser
+    ? filteredProducts.filter(product => {
+      const category = categoriesFromServer.find(
+        cat => cat.id === product.categoryId,
+      );
+      const user = usersFromServer.find(usr => usr.id === category.ownerId);
+
+      return user.id === selectedUser;
+    })
+    : filteredProducts;
+
   return (
     <div className="section">
       <div className="container">
@@ -137,13 +152,9 @@ export const App = () => {
         </div>
 
         <div className="box table-container">
-          <p data-cy="NoMatchingMessage">
-            No products matching selected criteria
-          </p>
-
           <table
+            className="table is-striped is-narrow is-fullwidthtable"
             data-cy="ProductTable"
-            className="table is-striped is-narrow is-fullwidth"
           >
             <thead>
               <tr>
@@ -157,29 +168,26 @@ export const App = () => {
                     </a>
                   </span>
                 </th>
-
                 <th>
                   <span className="is-flex is-flex-wrap-nowrap">
                     Product
                     <a href="#/">
                       <span className="icon">
-                        <i data-cy="SortIcon" className="fas fa-sort-down" />
+                        <i data-cy="SortIcon" className="fas fa-sort" />
                       </span>
                     </a>
                   </span>
                 </th>
-
                 <th>
                   <span className="is-flex is-flex-wrap-nowrap">
                     Category
                     <a href="#/">
                       <span className="icon">
-                        <i data-cy="SortIcon" className="fas fa-sort-up" />
+                        <i data-cy="SortIcon" className="fas fa-sort" />
                       </span>
                     </a>
                   </span>
                 </th>
-
                 <th>
                   <span className="is-flex is-flex-wrap-nowrap">
                     User
@@ -192,46 +200,41 @@ export const App = () => {
                 </th>
               </tr>
             </thead>
-
             <tbody>
-              <tr data-cy="Product">
-                <td className="has-text-weight-bold" data-cy="ProductId">
-                  1
-                </td>
+              {userFilteredProducts.length === 0 ? (
+                <tr>
+                  <td colSpan="4" data-cy="NoMatchingMessage">
+                    No products matching the current criteria
+                  </td>
+                </tr>
+              ) : (
+                userFilteredProducts.map(product => {
+                  const category = categoriesFromServer.find(
+                    cat => cat.id === product.categoryId,
+                  );
+                  const user = usersFromServer.find(
+                    usr => usr.id === category.ownerId,
+                  );
 
-                <td data-cy="ProductName">Milk</td>
-                <td data-cy="ProductCategory">🍺 - Drinks</td>
-
-                <td data-cy="ProductUser" className="has-text-link">
-                  Max
-                </td>
-              </tr>
-
-              <tr data-cy="Product">
-                <td className="has-text-weight-bold" data-cy="ProductId">
-                  2
-                </td>
-
-                <td data-cy="ProductName">Bread</td>
-                <td data-cy="ProductCategory">🍞 - Grocery</td>
-
-                <td data-cy="ProductUser" className="has-text-danger">
-                  Anna
-                </td>
-              </tr>
-
-              <tr data-cy="Product">
-                <td className="has-text-weight-bold" data-cy="ProductId">
-                  3
-                </td>
-
-                <td data-cy="ProductName">iPhone</td>
-                <td data-cy="ProductCategory">💻 - Electronics</td>
-
-                <td data-cy="ProductUser" className="has-text-link">
-                  Roma
-                </td>
-              </tr>
+                  return (
+                    <tr key={product.id} data-cy="Product">
+                      <td data-cy="ProductId">{product.id}</td>
+                      <td data-cy="ProductName">{product.name}</td>
+                      <td data-cy="SortIcon">
+                        {category.icon} {category.title}
+                      </td>
+                      <td
+                        data-cy="ProductUser"
+                        className={
+                          user.sex === 'm' ? 'has-text-link' : 'has-text-danger'
+                        }
+                      >
+                        {user.name}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
