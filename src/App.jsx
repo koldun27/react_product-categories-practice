@@ -15,7 +15,7 @@ import usersFromServer from './api/users';
 
 export const App = () => {
   const [selectedUser, setSelectedUser] = useState(null);
-  // const [searchField, setSearchField] = useState('');
+  const [searchField, setSearchField] = useState('');
 
   const filterUser = userId => {
     setSelectedUser(userId === selectedUser ? null : userId);
